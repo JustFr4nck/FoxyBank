@@ -1,18 +1,60 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core'; // <-- Aggiungi ViewChild qui
 import { CommonModule, NgClass } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { Router } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { BankService } from '../../services/bank.service';
 import { Transaction } from '../../models/saldo.model';
+import { BaseChartDirective } from 'ng2-charts';
+import { ChartConfiguration, ChartType } from 'chart.js';
 
 @Component({
   selector: 'app-lista-mov',
-  imports: [NgClass, CommonModule, RouterLink],
+  imports: [NgClass, CommonModule, RouterLink, BaseChartDirective],
   templateUrl: './lista-mov.html',
   styleUrl: './lista-mov.css',
 })
 export class ListaMov implements OnInit {
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
   movimenti: Transaction[] = [];
+  public lineChartType: ChartType = 'line';
+
+  public lineChartData: ChartConfiguration['data'] = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        label: 'Importo Movimento (€)',
+        borderColor: '#7c3aed',
+        backgroundColor: 'rgba(124, 58, 237, 0.1)',
+        pointBackgroundColor: '#f97316',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#7c3aed',
+        fill: 'origin',
+        tension: 0.4
+      }
+    ]
+  };
+
+  public lineChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { family: 'monospace', size: 10 } }
+      },
+      y: {
+        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { family: 'monospace', size: 10 } }
+      }
+    },
+    plugins: {
+      legend: {
+        labels: { color: '#fff', font: { family: 'monospace', size: 11 } }
+      }
+    }
+  };
 
   constructor(
     private bankService: BankService,
@@ -23,11 +65,31 @@ export class ListaMov implements OnInit {
     this.bankService.getTransactions(1).subscribe({
       next: (response) => {
         this.movimenti = response;
+        this.updateChartData();
       },
       error: (err) => {
         console.error('Error during call:', err);
       },
     });
+  }
+
+  private updateChartData(): void {
+    if (!this.movimenti || this.movimenti.length === 0) return;
+
+    const sortedMov = [...this.movimenti].reverse();
+
+    this.lineChartData.labels = sortedMov.map(m => {
+      const date = new Date(m.created_at);
+      return date.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' });
+    });
+
+    this.lineChartData.datasets[0].data = sortedMov.map(m =>
+      m.type === 'withdrawal' ? -Number(m.amount) : Number(m.amount)
+    );
+
+    if (this.chart) {
+      this.chart.update();
+    }
   }
 
   moneyRain = Array.from({ length: 40 }, (_, i) => {

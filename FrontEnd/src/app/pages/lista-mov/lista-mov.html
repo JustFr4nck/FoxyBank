@@ -1,14 +1,15 @@
 <div class="fixed inset-0 pointer-events-none overflow-hidden bg-black">
-  <div *ngFor="let item of moneyRain"
-       class="money-item absolute font-black select-none"
-       [style.left.%]="item.left"
-       [style.animation-duration.s]="item.duration"
-       [style.animation-delay.s]="item.delay"
-       [style.font-size.px]="item.size"
-       [style.opacity]="item.opacity"
-       [style.filter]="'blur(' + item.blur + ')'"
-       [style.z-index]="item.zIndex">
-
+  <div
+    *ngFor="let item of moneyRain"
+    class="money-item absolute font-black select-none"
+    [style.left.%]="item.left"
+    [style.animation-duration.s]="item.duration"
+    [style.animation-delay.s]="item.delay"
+    [style.font-size.px]="item.size"
+    [style.opacity]="item.opacity"
+    [style.filter]="'blur(' + item.blur + ')'"
+    [style.z-index]="item.zIndex"
+  >
     <span [ngClass]="item.id % 2 === 0 ? 'text-violet-500' : 'text-orange-500'">
       {{ item.char }}
     </span>
@@ -18,21 +19,40 @@
 <div class="min-h-screen bg-black pt-24 px-4 pb-20">
   <div class="max-w-5xl mx-auto">
 
-
     <div class="mb-10 flex items-center justify-between border-l-4 border-orange-600 pl-6">
       <div>
-        <h3 class="text-violet-500 font-mono text-xs tracking-[0.4em] uppercase mb-1">// TRANSACTION_LEDGER_RECORDS</h3>
-        <h1 class="text-white text-3xl font-black tracking-tighter uppercase italic">Transactions <span class="text-orange-500">Account #{{ movimenti[0]?.account_id || '---' }}</span></h1>
+        <h3 class="text-violet-500 font-mono text-xs tracking-[0.4em] uppercase mb-1">
+          // TRANSACTION_LEDGER_RECORDS
+        </h3>
+        <h1 class="text-white text-3xl font-black tracking-tighter uppercase italic">
+          Transactions
+          <span class="text-orange-500">Account #{{ movimenti[0]?.account_id || '---' }}</span>
+        </h1>
       </div>
       <div class="hidden md:block text-right">
-        <p class="text-white/20 font-mono text-[9px] leading-tight">ENCRYPTION: RSA-4096<br>STATUS: VERIFIED_BY_ADMIN</p>
+        <p class="text-white/20 font-mono text-[9px] leading-tight">
+          ENCRYPTION: RSA-4096<br />STATUS: VERIFIED_BY_ADMIN
+        </p>
       </div>
     </div>
 
+    <div class="mb-8 p-6 bg-white/[0.02] border border-white/10 rounded-lg shadow-[0_0_50px_rgba(124,58,237,0.02)]">
+      <h4 class="text-white/70 font-mono text-xs uppercase tracking-wider mb-4">
+        // ANALYTICS_GRAPH_SECTOR
+      </h4>
+
+      <div class="h-64 relative">
+        <canvas
+          baseChart
+          [data]="lineChartData"
+          [options]="lineChartOptions"
+          [type]="lineChartType"
+        >
+        </canvas>
+      </div>
+    </div>
 
     <div class="relative overflow-hidden bg-white/[0.02] border border-white/10 rounded-lg shadow-[0_0_50px_rgba(124,58,237,0.05)]">
-
-
       <div class="absolute top-0 left-0 w-full h-[1px] bg-violet-500/30 shadow-[0_0_10px_#7c3aed] animate-scan"></div>
 
       <div class="overflow-x-auto">
@@ -48,21 +68,21 @@
           </thead>
 
           <tbody class="divide-y divide-white/5">
-            <tr *ngFor="let move of movimenti"
-                class="group hover:bg-white/[0.03] transition-all duration-150"
-                [routerLink]="['/movDetails', move.id]">
-
-
+            <tr
+              *ngFor="let move of movimenti"
+              class="group hover:bg-white/[0.03] transition-all duration-150"
+              [routerLink]="['/movDetails', move.id]"
+            >
               <td class="px-6 py-4 font-mono text-[10px] text-white/40 group-hover:text-orange-500/80 transition-colors">
                 IDX_{{ move.id }}
               </td>
 
-
               <td class="px-6 py-4 text-white/70 font-mono text-xs">
-                {{ move.created_at | date:'dd/MM/yyyy' }}
-                <span class="block text-[10px] text-white/20 italic">{{ move.created_at | date:'HH:mm:ss' }}</span>
+                {{ move.created_at | date: 'dd/MM/yyyy' }}
+                <span class="block text-[10px] text-white/20 italic">
+                  {{ move.created_at | date: 'HH:mm:ss' }}
+                </span>
               </td>
-
 
               <td class="px-6 py-4">
                 <span class="text-white font-bold text-sm uppercase tracking-tight group-hover:text-violet-400 transition-colors">
@@ -70,19 +90,21 @@
                 </span>
               </td>
 
-
               <td class="px-6 py-4">
-                <div [ngClass]="move.type === 'deposit' ? 'text-green-500 bg-green-500/5' : 'text-red-500 bg-red-500/5'"
-                     class="inline-block px-3 py-1 rounded-full border border-current text-[9px] font-black uppercase tracking-tighter">
+                <div
+                  [ngClass]="move.type === 'deposit' ? 'text-green-500 bg-green-500/5' : 'text-red-500 bg-red-500/5'"
+                  class="inline-block px-3 py-1 rounded-full border border-current text-[9px] font-black uppercase tracking-tighter"
+                >
                   {{ move.type }}
                 </div>
               </td>
 
-
               <td class="px-6 py-4 text-right">
-                <span [ngClass]="move.type === 'withdrawal' ? 'text-red-500' : 'text-green-400'"
-                      class="font-mono text-lg font-black drop-shadow-sm">
-                  {{ move.type === 'withdrawal' ? '' : '+' }}{{ move.amount | currency:'EUR':'symbol':'1.2-2' }}
+                <span
+                  [ngClass]="move.type === 'withdrawal' ? 'text-red-500' : 'text-green-400'"
+                  class="font-mono text-lg font-black drop-shadow-sm"
+                >
+                  {{ move.type === 'withdrawal' ? '' : '+' }}{{ move.amount | currency: 'EUR' : 'symbol' : '1.2-2' }}
                 </span>
               </td>
             </tr>
@@ -90,22 +112,24 @@
         </table>
       </div>
 
-
       <div *ngIf="movimenti.length === 0" class="p-20 text-center">
-        <p class="text-white/20 font-mono text-xs animate-pulse">>> NO_DATA_FOUND_IN_THIS_SECTOR <<</p>
+        <p class="text-white/20 font-mono text-xs animate-pulse">
+          >> NO_DATA_FOUND_IN_THIS_SECTOR <<
+        </p>
       </div>
     </div>
 
-
     <div class="mt-8 flex justify-between items-center">
-      <button routerLink="/" class="group flex items-center gap-2 text-white/40 hover:text-white transition-all font-mono text-[10px] uppercase">
-        <span class="group-hover:-translate-x-1 transition-transform"><<</span> [ Back_to_Main_Page ]
+      <button
+        routerLink="/"
+        class="group flex items-center gap-2 text-white/40 hover:text-white transition-all font-mono text-[10px] uppercase"
+      >
+        <span class="group-hover:-translate-x-1 transition-transform">&lt;&lt;</span> [ Back_to_Main_Page ]
       </button>
 
       <div class="text-[9px] font-mono text-white/10 uppercase tracking-[0.2em]">
-        Node_Access: 127.0.0.1 // Account_Linked: {{ movimenti[0]?.account_id }}
+        Node_Access: 127.0.0.1 // Account_Linked: {{ movimenti[0]?.account_id || '---' }}
       </div>
     </div>
-
   </div>
 </div>
