@@ -2,10 +2,10 @@
     "require": {
         "slim/slim": "4.*",
         "slim/psr7": "^1.6",
-        "mustache/mustache": "^2.14"
+        "mustache/mustache": "^2.14",
+        "google/apiclient": "^2.19"
     },
     "require-dev": {
         "phpunit/phpunit": "^11.0"
     }
 }
-

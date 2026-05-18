@@ -3,14 +3,12 @@ error_reporting(0);
 header('Content-Type: application/json');
 use Slim\Factory\AppFactory;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/controllers/MovimentiController.php';
 require __DIR__ . '/controllers/SaldoController.php';
 require __DIR__ . '/controllers/AccountController.php';
 require __DIR__ . '/handlers/CustomErrorHandler.php';
+require __DIR__ . '/controllers/logRegController.php';
 
 
 $app = AppFactory::create();
@@ -30,6 +28,9 @@ $app->post('/accounts/{idAccount}/deposit', "MovimentiController:create");
 $app->post('/accounts/{idAccount}/withdrawals', "MovimentiController:remove");
 $app->put('/accounts/{idAccount}/transactions/{idTransaction}', "MovimentiController:update");
 $app->delete('/accounts/{idAccount}/transactions/{idTransaction}', "MovimentiController:destroy");
+
+//login or register
+$app->post('/login', "LogRegController:check");
 
 //Account
 $app->get('/accounts/{idAccount}/user', "AccountController:index");

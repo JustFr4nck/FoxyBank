@@ -16,7 +16,7 @@ class CustomErrorHandler
     ) {
         $response = new Response();
         
-        // Determina lo status code (default 500)
+        
         $statusCode = 500;
         if ($exception instanceof HttpException) {
             $statusCode = $exception->getCode();
@@ -27,7 +27,7 @@ class CustomErrorHandler
             'message' => $exception->getMessage()
         ];
 
-        // Se abilitato, aggiunge i dettagli dell'eccezione
+       
         if ($displayErrorDetails) {
             $payload['error_details'] = [
                 'type' => get_class($exception),
