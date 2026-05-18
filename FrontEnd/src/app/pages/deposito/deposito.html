@@ -1,97 +1,156 @@
-<!-- Background Animation (Pioggia) -->
-<div class="fixed inset-0 pointer-events-none overflow-hidden bg-black z-0">
-  <div *ngFor="let item of moneyRain"
-       class="money-item absolute font-black select-none"
-       [style.left.%]="item.left"
-       [style.animation-duration.s]="item.duration"
-       [style.animation-delay.s]="item.delay"
-       [style.font-size.px]="item.size"
-       [style.opacity]="item.opacity"
-       [style.filter]="'blur(' + item.blur + ')'"
-       [style.z-index]="item.zIndex">
-    <span [ngClass]="item.id % 2 === 0 ? 'text-emerald-500' : 'text-green-500'">
-      {{ item.char }}
-    </span>
+<div class="fixed inset-0 pointer-events-none overflow-hidden bg-[#020503] z-0">
+  <div
+    *ngFor="let item of moneyRain"
+    class="money-item absolute font-mono font-black select-none opacity-20"
+    [style.left.%]="item.left"
+    [style.animation-duration.s]="item.duration"
+    [style.animation-delay.s]="item.delay"
+    [style.font-size.px]="item.size"
+    [style.filter]="'blur(' + item.blur + ')'"
+    [style.z-index]="item.zIndex"
+  >
+    <span class="text-emerald-700/30">{{ item.char }}</span>
   </div>
 </div>
 
-<div class="min-h-screen flex items-center justify-center p-4 relative bg-transparent font-sans">
-  <div class="particle-container">
-    <span *ngFor="let p of particles"
-          class="particle text-3xl"
-          [style.--tx.px]="p.x"
-          [style.--ty.px]="p.y"
-          [style.--tr.deg]="p.rotate">
-      {{ p.icon }}
-    </span>
-  </div>
+<div class="particle-container">
+  <span
+    *ngFor="let p of particles"
+    class="particle text-3xl"
+    [style.--tx.px]="p.x"
+    [style.--ty.px]="p.y"
+    [style.--tr.deg]="p.rotate"
+  >
+    {{ p.icon }}
+  </span>
+</div>
 
-  <div class="w-full max-w-md z-10">
-    <div class="bg-gradient-to-br from-green-950/20 to-black backdrop-blur-3xl border border-green-500/20 rounded-[2.5rem] p-8 shadow-[0_0_50px_rgba(34,197,94,0.1)] relative group">
+<div class="min-h-screen flex flex-col relative z-10 text-white selection:bg-emerald-500/30">
 
-      <div class="text-center mb-6">
-        <p class="text-green-500 text-[9px] font-mono tracking-[0.4em] uppercase mb-2">Security_Level: High</p>
-        <h1 class="text-3xl font-black text-white uppercase tracking-tighter">New Deposit</h1>
-      </div>
+  <header class="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center border-b border-white/[0.04]">
+    <div class="flex items-center gap-3">
+      <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse"></div>
+      <span class="font-mono text-xs uppercase tracking-[0.3em] text-white/60">Apex_Core_v3.1</span>
+    </div>
+    <button
+      routerLink="/listaMovimenti"
+      class="group font-mono text-[10px] uppercase tracking-wider text-white/40 hover:text-emerald-400 transition-colors flex items-center gap-2"
+    >
+      <span class="group-hover:-translate-x-1 transition-transform">&lt;&lt;</span> [ Abort_And_Return ]
+    </button>
+  </header>
 
+  <main class="flex-1 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 px-6 py-12 items-center">
 
-      <div class="mb-6 p-4 rounded-2xl bg-black/40 border border-green-500/10 flex justify-between items-center">
-        <div>
-          <p class="text-[8px] text-green-500/50 uppercase tracking-widest mb-1">Current Balance</p>
-          <p class="text-xl font-mono font-black text-white">€ {{ saldoAttuale.toFixed(2) }}</p>
+    <section class="col-span-1 lg:col-span-7 flex justify-center w-full order-2 lg:order-1">
+      <div class="w-full max-w-lg bg-gradient-to-b from-[#061208] to-[#040905] border border-emerald-500/10 rounded-[2.5rem] p-8 lg:p-10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] relative overflow-hidden">
+
+        <div class="absolute -top-24 -right-24 w-48 h-48 bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none"></div>
+
+        <div class="flex justify-center mb-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/5 border border-emerald-500/10">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981] animate-ping"></span>
+            <span class="text-emerald-500 font-mono text-[9px] tracking-[0.2em] uppercase">Security_Level: High</span>
+          </div>
         </div>
-        <div class="text-right">
-          <p class="text-[8px] text-green-500/50 uppercase tracking-widest mb-1">Inflow Limit</p>
-          <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-mono bg-green-500/10 text-green-400 border border-green-500/20">
-            UNLIMITED
-          </span>
-        </div>
-      </div>
 
-      <div class="space-y-6">
-        <div class="relative">
-          <label class="text-[8px] text-green-500/50 uppercase tracking-widest ml-4 mb-2 block">Amount to Inject</label>
-          <div class="relative">
-            <span class="absolute left-6 top-1/2 -translate-y-1/2 text-green-500 font-bold">€</span>
-            <input type="number" [(ngModel)]="importo" class="w-full bg-black/60 border border-green-500/20 rounded-2xl py-5 pl-12 pr-6 text-2xl font-black text-white focus:border-green-500 outline-none transition-all placeholder:text-green-950" placeholder="0.00"/>
+        <div class="mb-8 p-5 rounded-2xl bg-black/50 border border-white/[0.03] flex justify-between items-center relative">
+          <div>
+            <p class="text-[9px] text-white/40 uppercase tracking-widest font-mono mb-1">Current Balance</p>
+            <p class="text-2xl font-mono font-black text-white tracking-tight">
+              € {{ saldoAttuale?.toFixed(2) }}
+            </p>
+          </div>
+          <div class="text-right">
+            <p class="text-[9px] text-white/40 uppercase tracking-widest font-mono mb-1">Inflow Limit</p>
+            <span class="inline-flex items-center px-2 py-1 rounded-md text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              UNLIMITED
+            </span>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+
+          <div>
+            <div class="flex justify-between items-center mb-2 px-2">
+              <label class="text-[10px] text-white/50 uppercase tracking-widest font-mono">Amount to Inject</label>
+              <span class="text-[10px] font-mono text-emerald-400">Instant Clearing</span>
+            </div>
+
+            <div class="relative group-input">
+              <span class="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-500/40 text-xl font-bold transition-colors group-focus-within:text-emerald-500">€</span>
+              <input
+                type="number"
+                [(ngModel)]="importo"
+                class="w-full bg-black/40 border border-white/[0.08] rounded-2xl py-5 pl-12 pr-6 text-3xl font-mono font-black text-white focus:border-emerald-500/40 focus:bg-emerald-950/10 outline-none transition-all placeholder:text-white/10"
+                placeholder="0.00"
+              />
+            </div>
+
+            <div class="grid grid-cols-4 gap-2 mt-3">
+              <button
+                *ngFor="let quickAmount of tagliRapidi"
+                type="button"
+                (click)="selezionaImportoRapido(quickAmount)"
+                class="py-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs font-mono text-white/60 hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-400 transition-all active:scale-95"
+              >
+                +{{ quickAmount }}
+              </button>
+            </div>
           </div>
 
+          <div>
+            <label class="text-[10px] text-white/50 uppercase tracking-widest font-mono mb-2 block px-2">Reason / Label</label>
+            <input
+              type="text"
+              [(ngModel)]="descrizione"
+              class="w-full bg-black/40 border border-white/[0.08] rounded-2xl py-4 px-6 text-sm font-mono text-white/80 focus:border-emerald-500/40 focus:bg-emerald-950/10 outline-none transition-all placeholder:text-white/20"
+              placeholder="e.g. Monthly Savings, Gift, Bonus..."
+            />
+          </div>
 
-          <div class="grid grid-cols-4 gap-2 mt-2 px-1">
+          <div class="pt-2">
             <button
-              *ngFor="let quickAmount of tagliRapidi"
-              type="button"
-              (click)="selezionaImportoRapido(quickAmount)"
-              class="py-2 rounded-xl bg-green-950/20 border border-green-500/10 text-xs font-mono text-green-400 hover:bg-green-500/20 hover:text-white transition-all active:scale-95"
+              (click)="faiDeposito()"
+              [disabled]="importo <= 0"
+              class="relative w-full py-5 text-sm font-mono font-bold uppercase tracking-[0.2em] rounded-2xl transition-all active:scale-95 disabled:opacity-20 disabled:cursor-not-allowed disabled:scale-100 disabled:shadow-none overflow-hidden group/btn"
+              [ngClass]="importo <= 0 ? 'bg-zinc-900 border border-emerald-500/20 text-emerald-500/60' : 'bg-gradient-to-r from-emerald-700 to-emerald-600 text-white shadow-[0_0_30px_rgba(16,185,129,0.2)] hover:shadow-[0_0_40px_rgba(16,185,129,0.4)]'"
             >
-              +€{{ quickAmount }}
+              <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_1.5s_infinite]"></span>
+
+              <span *ngIf="importo <= 0">[ Enter Amount ]</span>
+              <span *ngIf="importo > 0">Confirm Deposit</span>
             </button>
           </div>
         </div>
 
-        <div class="relative">
-          <label class="text-[8px] text-green-500/50 uppercase tracking-widest ml-4 mb-2 block">Reason / Label</label>
-          <input
-            type="text"
-            [(ngModel)]="descrizione"
-            class="w-full bg-black/60 border border-green-500/20 rounded-2xl py-4 px-6 text-sm font-mono text-green-400 focus:border-green-500 outline-none transition-all placeholder:text-green-950/50"
-            placeholder="E.g. Monthly Savings, Gift, Bonus..."
-          />
+        <div class="mt-8 pt-6 border-t border-white/[0.03] flex justify-between items-center text-[8px] font-mono text-white/20 uppercase tracking-widest">
+          <span>Secure_Channel: Active</span>
+          <span>Hash: #{{ (importo * 1.2).toFixed(0) || '0' }}</span>
         </div>
 
-        <button
-          (click)="faiDeposito()"
-          [disabled]="importo <= 0"
-          class="relative w-full py-5 text-white font-black uppercase tracking-[0.2em] rounded-2xl transition-all active:scale-95 shadow-[0_0_25px_rgba(22,163,74,0.4)] disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 disabled:shadow-none bg-green-600 hover:bg-green-500"
-        >
-          <span *ngIf="importo <= 0">Enter Amount</span>
-          <span *ngIf="importo > 0">Confirm Deposit</span>
-        </button>
+      </div>
+    </section>
+
+    <section class="hidden lg:flex lg:col-span-5 flex-col space-y-8 pl-8 border-l border-white/[0.04] order-1 lg:order-2">
+      <div>
+        <span class="text-emerald-500 font-mono text-xs uppercase tracking-[0.4em] block mb-2">// SECURE_INFLOW_NODE</span>
+        <h2 class="text-5xl font-black uppercase tracking-tighter italic leading-none">
+          Capital<br /><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500">Injection</span>
+        </h2>
+        <p class="text-white/40 text-sm font-light mt-4 leading-relaxed">
+          You are executing an authorized fund injection ledger script. The liquid capital assets will be allocated immediately across our decentralized nodes upon signature verification.
+        </p>
       </div>
 
-      <p class="mt-8 text-green-500/20 text-[7px] text-center uppercase tracking-[0.5em]">
-        Transaction_Encrypted_v2.0 // Hash: {{ (importo * 1.2).toFixed(0) }}
-      </p>
-    </div>
-  </div>
+      <div class="p-4 rounded-2xl bg-white/[0.01] border border-white/5 font-mono text-[10px] space-y-1.5 text-white/30">
+        <p class="text-emerald-500/50">// INFLOW_LOG_STREAM:</p>
+        <p>&gt; Indexing wallet destination block...</p>
+        <p>&gt; Network validation latency: <span class="text-emerald-400">0.42ms</span></p>
+        <p>&gt; Security handshake token compiled</p>
+        <p>&gt; Safe routing parameters locked.</p>
+      </div>
+    </section>
+
+  </main>
 </div>

@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  background-color: #030104;
+  min-height: 100vh;
+}
+
+.money-item {
+  top: -100px;
+  animation: rain linear infinite;
+  will-change: transform;
+}
+
+@keyframes rain {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(120vh); }
+}
+
+input:focus {
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.08);
+  border-color: rgba(139, 92, 246, 0.3) !important;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}

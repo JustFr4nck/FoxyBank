@@ -1,11 +1,8 @@
-
 <div class="cursor-glow"></div>
-
-
 <div class="ambient-glow"></div>
 <div class="ambient-glow-2"></div>
 
-<app-my-navbar></app-my-navbar>
+<app-my-navbar *ngIf="showNavbar"></app-my-navbar>
 
 <main class="relative z-10">
   <router-outlet></router-outlet>

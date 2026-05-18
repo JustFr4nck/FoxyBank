@@ -1,7 +1,8 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { routes } from '../../app.routes';
+
 
 @Component({
   selector: 'app-my-navbar',
@@ -15,12 +16,15 @@ export class MyNavbar implements OnInit {
   isMenuOpen = false;
   isAccountMenuOpen = false;
 
+  constructor(private router: Router){};
+
   ngOnInit(): void {
     this.navLinks = routes
       .filter(
         (route) =>
           route.path !== '' &&
           route.path !== undefined &&
+          route.path !== 'auth' &&
           route.path !== '**' &&
           !route.path.includes(':'),
       )
@@ -67,6 +71,7 @@ export class MyNavbar implements OnInit {
   }
 
   logout() {
+    this.router.navigate(['/auth']);
     console.log('Session terminated.');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core'; // <-- Aggiungi ViewChild qui
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { BankService } from '../../services/bank.service';
@@ -16,6 +16,7 @@ export class ListaMov implements OnInit {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
   movimenti: Transaction[] = [];
+  filtroAttivo: 'all' | 'deposit' | 'withdrawal' = 'all';
   public lineChartType: ChartType = 'line';
 
   public lineChartData: ChartConfiguration['data'] = {
@@ -23,7 +24,7 @@ export class ListaMov implements OnInit {
     datasets: [
       {
         data: [],
-        label: 'Importo Movimento (€)',
+        label: 'Saldo Progressivo (€)',
         borderColor: '#7c3aed',
         backgroundColor: 'rgba(124, 58, 237, 0.1)',
         pointBackgroundColor: '#f97316',
@@ -64,7 +65,7 @@ export class ListaMov implements OnInit {
   ngOnInit(): void {
     this.bankService.getTransactions(1).subscribe({
       next: (response) => {
-        this.movimenti = response;
+        this.movimenti = response.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         this.updateChartData();
       },
       error: (err) => {
@@ -73,19 +74,37 @@ export class ListaMov implements OnInit {
     });
   }
 
+  get movimentiFiltrati(): Transaction[] {
+    if (this.filtroAttivo === 'all') {
+      return this.movimenti;
+    }
+    return this.movimenti.filter(m => m.type === this.filtroAttivo);
+  }
+
+  setFiltro(filtro: 'all' | 'deposit' | 'withdrawal'): void {
+    this.filtroAttivo = filtro;
+  }
+
   private updateChartData(): void {
     if (!this.movimenti || this.movimenti.length === 0) return;
 
-    const sortedMov = [...this.movimenti].reverse();
+    const cronologico = [...this.movimenti].reverse();
 
-    this.lineChartData.labels = sortedMov.map(m => {
+    this.lineChartData.labels = cronologico.map(m => {
       const date = new Date(m.created_at);
       return date.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' });
     });
 
-    this.lineChartData.datasets[0].data = sortedMov.map(m =>
-      m.type === 'withdrawal' ? -Number(m.amount) : Number(m.amount)
-    );
+    let currentBalance = 0;
+    this.lineChartData.datasets[0].data = cronologico.map(m => {
+      const amount = Math.abs(Number(m.amount));
+      if (m.type === 'withdrawal') {
+        currentBalance -= amount;
+      } else {
+        currentBalance += amount;
+      }
+      return currentBalance;
+    });
 
     if (this.chart) {
       this.chart.update();
