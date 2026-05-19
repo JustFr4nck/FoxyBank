@@ -1,4 +1,4 @@
-import { LogReg } from './components/log-reg/log-reg';
+import { LogReg } from './auth/log-reg/log-reg';
 import { HomePage } from './components/home-page/home-page';
 import { Routes } from '@angular/router';
 import { ListaMov } from './pages/lista-mov/lista-mov';
