@@ -14,29 +14,43 @@
 </div>
 
 <div class="min-h-screen flex flex-col relative z-10 text-white selection:bg-violet-500/30">
-
-  <header class="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center border-b border-white/[0.04]">
+  <header
+    class="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center border-b border-white/[0.04]"
+  >
     <div class="flex items-center gap-3">
       <div class="w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_10px_#8b5cf6] animate-pulse"></div>
-      <span class="font-mono text-xs uppercase tracking-[0.3em] text-white/60">Apex_Auth_Gate_v1.0</span>
+      <span class="font-mono text-xs uppercase tracking-[0.3em] text-white/60"
+        >Apex_Auth_Gate_v1.0</span
+      >
     </div>
   </header>
 
-  <main class="flex-1 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 px-6 py-12 items-center">
-
-    <section class="hidden lg:flex lg:col-span-5 flex-col space-y-8 pr-8 border-r border-white/[0.04]">
+  <main
+    class="flex-1 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 px-6 py-12 items-center"
+  >
+    <section
+      class="hidden lg:flex lg:col-span-5 flex-col space-y-8 pr-8 border-r border-white/[0.04]"
+    >
       <div>
-        <span class="text-violet-500 font-mono text-xs uppercase tracking-[0.4em] block mb-2">// IDENTITY_GATEWAY</span>
+        <span class="text-violet-500 font-mono text-xs uppercase tracking-[0.4em] block mb-2"
+          >// IDENTITY_GATEWAY</span
+        >
         <h2 class="text-5xl font-black uppercase tracking-tighter italic leading-none">
           Access<br />
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-fuchsia-500">Terminal</span>
+          <span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-fuchsia-500"
+            >Terminal</span
+          >
         </h2>
         <p class="text-white/40 text-sm font-light mt-4 leading-relaxed">
-          Authenticate using your network identity provider to clear the mainframe firewall protocol.
+          Authenticate using your network identity provider to clear the mainframe firewall
+          protocol.
         </p>
       </div>
 
-      <div class="p-4 rounded-2xl bg-white/[0.01] border border-white/5 font-mono text-[10px] space-y-1.5 text-white/30">
+      <div
+        class="p-4 rounded-2xl bg-white/[0.01] border border-white/5 font-mono text-[10px] space-y-1.5 text-white/30"
+      >
         <p class="text-violet-500/50">// SECURITY_CONTEXT:</p>
         <p>&gt; Gateway protocol: <span class="text-fuchsia-400">OAUTH_READY</span></p>
         <p>&gt; IP location matching checking... Active</p>
@@ -45,13 +59,20 @@
     </section>
 
     <section class="col-span-1 lg:col-span-7 flex justify-center w-full">
-      <div class="w-full max-w-md bg-gradient-to-b from-[#0f0612] to-[#060409] border border-violet-500/10 rounded-[2.5rem] p-8 lg:p-10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col items-center justify-center min-h-[350px]">
-
-        <div class="absolute -top-24 -left-24 w-48 h-48 bg-violet-500/10 rounded-full blur-[80px] pointer-events-none"></div>
+      <div
+        class="w-full max-w-md bg-gradient-to-b from-[#0f0612] to-[#060409] border border-violet-500/10 rounded-[2.5rem] p-8 lg:p-10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col items-center justify-center min-h-[350px]"
+      >
+        <div
+          class="absolute -top-24 -left-24 w-48 h-48 bg-violet-500/10 rounded-full blur-[80px] pointer-events-none"
+        ></div>
 
         <div class="flex justify-center mb-8">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/5 border border-violet-500/10">
-            <span class="w-1.5 h-1.5 rounded-full bg-violet-500 shadow-[0_0_8px_#8b5cf6] animate-pulse"></span>
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/5 border border-violet-500/10"
+          >
+            <span
+              class="w-1.5 h-1.5 rounded-full bg-violet-500 shadow-[0_0_8px_#8b5cf6] animate-pulse"
+            ></span>
             <span class="text-violet-400 font-mono text-[9px] tracking-[0.2em] uppercase">
               SECURE_OAUTH_MODE
             </span>
@@ -59,25 +80,34 @@
         </div>
 
         <div class="w-full flex flex-col items-center justify-center space-y-4">
-          <p class="text-center font-mono text-xs text-white/60 mb-2">// IDENTITY_PROVIDER_REQUIRED</p>
+          <p class="text-center font-mono text-xs text-white/60 mb-2">
+            // IDENTITY_PROVIDER_REQUIRED
+          </p>
 
-          <button
+          <a
             type="button"
-            (click)="loginWithGoogle()"
+            href="http://localhost:80/auth/google"
             class="w-full max-w-sm flex items-center justify-center bg-white text-gray-700 font-sans font-medium text-sm rounded-lg px-4 py-3 border border-gray-300 shadow-sm hover:shadow-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 active:scale-[0.98]"
           >
             <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" width="24px" height="24px">
-              <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3.01A11.962 11.962 0 0 0 12 1C5.936 1 1.059 5.422.182 11.235l5.084-1.47z"/>
-              <path fill="#4285F4" d="M23.736 12.24c0-.796-.073-1.564-.2-2.305H12v4.527h6.582c-.282 1.518-1.136 2.805-2.427 3.664l4.136 3.205C22.71 19.145 23.736 16 23.736 12.24z"/>
-              <path fill="#FBBC05" d="M5.266 14.235L.182 15.765A11.962 11.962 0 0 0 12 23c2.99 0 5.81-.1 8.31-2.914l-4.136-3.205a7.127 7.127 0 0 1-4.174 1.21c-3.79 0-7.009-2.545-8.155-6.105z"/>
-              <path fill="#34A853" d="M.182 11.235a11.758 11.758 0 0 0 0 3a7.14 7.14 0 0 1 0-3z"/>
+              <path
+                fill="#EA4335"
+                d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3.01A11.962 11.962 0 0 0 12 1C5.936 1 1.059 5.422.182 11.235l5.084-1.47z"
+              />
+              <path
+                fill="#4285F4"
+                d="M23.736 12.24c0-.796-.073-1.564-.2-2.305H12v4.527h6.582c-.282 1.518-1.136 2.805-2.427 3.664l4.136 3.205C22.71 19.145 23.736 16 23.736 12.24z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.266 14.235L.182 15.765A11.962 11.962 0 0 0 12 23c2.99 0 5.81-.1 8.31-2.914l-4.136-3.205a7.127 7.127 0 0 1-4.174 1.21c-3.79 0-7.009-2.545-8.155-6.105z"
+              />
+              <path fill="#34A853" d="M.182 11.235a11.758 11.758 0 0 0 0 3a7.14 7.14 0 0 1 0-3z" />
             </svg>
             Accedi con Google
-          </button>
+          </a>
         </div>
-
       </div>
     </section>
-
   </main>
 </div>

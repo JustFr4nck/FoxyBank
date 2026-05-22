@@ -20,7 +20,7 @@ CREATE TABLE `transactions` (
   FOREIGN KEY (`account_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `accounts` (`owner_name`, `currency`) VALUES
+INSERT INTO `accounts` (`user_name`, `currency`) VALUES
 ('Mario Rossi', 'EUR');
 
 INSERT INTO `transactions` (`account_id`, `type`, `amount`, `description`) VALUES

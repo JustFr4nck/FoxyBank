@@ -45,6 +45,7 @@
 
       <div class="h-64 relative">
         <canvas
+          *ngIf="lineChartData.labels && lineChartData.labels.length > 0"
           baseChart
           [data]="lineChartData"
           [options]="lineChartOptions"

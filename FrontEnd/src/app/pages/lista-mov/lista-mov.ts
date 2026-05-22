@@ -4,7 +4,10 @@ import { RouterLink, Router } from '@angular/router';
 import { BankService } from '../../services/bank.service';
 import { Transaction } from '../../models/saldo.model';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration, ChartType } from 'chart.js';
+import { ChartConfiguration, ChartType, Chart, registerables } from 'chart.js';
+
+// Registrazione globale esplicita dei moduli per Chart.js versione 4+
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-lista-mov',
@@ -90,13 +93,13 @@ export class ListaMov implements OnInit {
 
     const cronologico = [...this.movimenti].reverse();
 
-    this.lineChartData.labels = cronologico.map(m => {
+    const nuoveEtichette = cronologico.map(m => {
       const date = new Date(m.created_at);
       return date.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' });
     });
 
     let currentBalance = 0;
-    this.lineChartData.datasets[0].data = cronologico.map(m => {
+    const nuoviDati = cronologico.map(m => {
       const amount = Math.abs(Number(m.amount));
       if (m.type === 'withdrawal') {
         currentBalance -= amount;
@@ -106,9 +109,23 @@ export class ListaMov implements OnInit {
       return currentBalance;
     });
 
-    if (this.chart) {
-      this.chart.update();
-    }
+    const configurazioneDatasetEsistente = this.lineChartData.datasets[0] || {};
+
+    this.lineChartData = {
+      labels: nuoveEtichette,
+      datasets: [
+        {
+          ...configurazioneDatasetEsistente, 
+          data: nuoviDati
+        }
+      ]
+    };
+
+    setTimeout(() => {
+      if (this.chart) {
+        this.chart.update();
+      }
+    }, 50);
   }
 
   moneyRain = Array.from({ length: 40 }, (_, i) => {
