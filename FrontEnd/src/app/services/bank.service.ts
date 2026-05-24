@@ -56,7 +56,7 @@ export class BankService {
 
   //deposit
   doDeposit(data: Partial<Transaction>): Observable<Transaction> {
-    return this.http.post<Transaction>(`/deposit`, data);
+    return this.http.post<Transaction>(`${this.apiUrl}/deposit`, data);
   }
 
   //logout
