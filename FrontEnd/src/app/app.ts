@@ -1,12 +1,13 @@
 import { Component, signal, HostListener } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { MyNavbar } from './components/my-navbar/my-navbar';
+import { MyFooter } from './components/my-footer/my-footer';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet, MyNavbar],
+  imports: [CommonModule, RouterOutlet, MyNavbar, MyFooter],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

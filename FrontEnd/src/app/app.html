@@ -1,9 +1,15 @@
-<div class="cursor-glow"></div>
-<div class="ambient-glow"></div>
-<div class="ambient-glow-2"></div>
+<div class="flex flex-col min-h-[100dvh] bg-zinc-950 text-white relative overflow-x-hidden">
 
-<app-my-navbar *ngIf="showNavbar"></app-my-navbar>
+  <div class="cursor-glow pointer-events-none"></div>
+  <div class="ambient-glow pointer-events-none"></div>
+  <div class="ambient-glow-2 pointer-events-none"></div>
 
-<main class="relative z-10">
-  <router-outlet></router-outlet>
-</main>
+  <app-my-navbar *ngIf="showNavbar"></app-my-navbar>
+
+  <main class="flex-grow relative z-10 w-full">
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-my-footer></app-my-footer>
+
+</div>
