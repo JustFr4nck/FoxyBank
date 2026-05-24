@@ -5,6 +5,7 @@ import { ListaMov } from './pages/lista-mov/lista-mov';
 import { MovDetails } from './pages/mov-details/mov-details';
 import { Prelievo } from './pages/prelievo/prelievo';
 import { Deposito } from './pages/deposito/deposito';
+import { SettingsPage } from './pages/settings-page/settings-page';
 
 
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
     {path: "movDetails/:id", component: MovDetails},
     {path: "prelievo", component: Prelievo},
     {path: "deposito", component: Deposito},
+    {path: "settings", component: SettingsPage},
     {path: "**", redirectTo: ""}
 
 ];

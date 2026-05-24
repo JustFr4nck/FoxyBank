@@ -30,6 +30,7 @@ export class MyNavbar implements OnInit {
           route.path !== '' &&
           route.path !== undefined &&
           route.path !== 'login' &&
+          route.path !== 'settings' &&
           route.path !== '**' &&
           !route.path.includes(':'),
       )
