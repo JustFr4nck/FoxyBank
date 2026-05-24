@@ -1,0 +1,21 @@
+[package]
+name = "il-tuo-username/il-nome-della-tua-app"
+version = "0.1.0"
+description = "Backend PHP su Wasmer Edge"
+
+[[module]]
+source = "wasmer/php:8.3.6" # Puoi specificare la versione di PHP che preferisci
+name = "php"
+
+[[command]]
+name = "php-cgi"
+module = "php"
+runner = "https://webc.org/runner/wasi"
+
+[redirects]
+# Reindirizza tutto il traffico al tuo file di backend principale (es. index.php o api.php)
+"/*" = "/index.php"
+
+[fs]
+# Mappa la cartella corrente nel file system virtuale di Wasmer
+"/" = "."
