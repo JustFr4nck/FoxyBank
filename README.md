@@ -1,4 +1,4 @@
-# 🏦 FranckBank - Cyber-Banking Terminal v3.0 🚀
+# 🏦 FranckBank - Cyber-Banking Terminal v1.0.0 🚀
 
 ![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
@@ -7,68 +7,78 @@
 ![OAuth2](https://img.shields.io/badge/Security-OAuth2.0-green?style=for-the-badge&logo=json-web-tokens)
 ![Bitcoin](https://img.shields.io/badge/Crypto-Bitcoin-orange?style=for-the-badge&logo=bitcoin)
 
-> **FranckBank** è un ecosistema bancario digitale completo. Un'interfaccia futuristica gestisce un potente motore finanziario capace di elaborare transazioni in tempo reale, conversioni valutarie e asset digitali con standard di sicurezza bancari.
+An ultra-modern, cyberpunk-themed digital banking web application featuring high-end reactive layouts, neon aesthetic accents, secure real-time state synchronization, and a terminal-inspired architecture.
 
 ---
 
-## ⚡ Funzionalità Core (Business Logic)
+## 🛠️ Tech Stack & Dependencies
 
-### 💸 Gestione Finanziaria & Asset
-*   **Visualizzazione Lista Movimenti**: Elenco cronologico dettagliato di tutte le attività del conto con filtri dinamici.
-*   **Deposito & Prelievo**: Funzioni di versamento e prelievo fondi con aggiornamento istantaneo del bilancio.
-*   **Modifica & Eliminazione**: Gestione flessibile dei movimenti (rettifica causali o rimozione transazioni).
-*   **Multicurrency Engine**: Conversione istantanea del saldo e dei movimenti in **USD ($)**.
-*   **Crypto Dashboard**: Sistema di conversione in tempo reale del capitale in **Bitcoin (BTC)**, integrando tassi di cambio aggiornati.
+### Frontend Architecture
+* **Framework:** Angular (v17+) – Component-driven frontend structure with standalone components.
+* **Styling Engine:** Tailwind CSS – Fluid util-first styling framework with dynamic theme configurations.
+* **Typography:** Fira Code (Google Fonts) – Monospaced developer-centric layout.
 
-### 🔐 Sicurezza & Accesso
-*   **Login Sicuro OAuth2**: Implementazione dello standard OAuth2 per l'autenticazione delegata.
-*   **Token-Based Auth**: Utilizzo di JWT (JSON Web Tokens) per sessioni stateless sicure tra Angular e PHP Slim.
-*   **Access Control**: Protezione delle rotte lato client (Guards) e validazione degli scope lato server.
+### Backend & Database Engine
+* **Database:** MySQL / MariaDB (InnoDB Engine)
+* **Collation:** `utf8mb4_general_ci` (Full multibyte character support for internationalization and media strings).
 
 ---
 
-## 📱 User Experience & Design
-*   **Adaptive Responsive Navbar**: Fix `100dvh` per una navigazione perfetta su tutti i dispositivi mobile.
-*   **Account Terminal**: Menu popup desktop e sidebar mobile per la gestione profilo e impostazioni.
-*   **Cyber-Design System**: Estetica neon-noir, glassmorphism e animazioni micro-interattive in JetBrains Mono.
+## ⚡ Core Features & Services
+
+* **Secure Authentication (Google OAuth):** Passwordless decentralized authentication infrastructure bound to unique node entities.
+* **Global Account Hub:** Comprehensive asset profile displaying the system terminal status, unique `user_name`, linked communication routes (`email`), and localized account timestamps.
+* **Real-time Liquidity Tracking:** Instant balance computational system displaying available fiat assets (`EUR`) synchronized with network ledger databases.
+* **Transactional Ledger Processing:** Relational transaction accounting processing dual transaction mechanisms:
+    * `deposit` – Financial node expansion routing incoming cashflows.
+    * `withdrawal` – Direct capital liquidation.
+* **Responsive Fluid Interfacing:** Borderless UI architecture scaling from 4K ultra-wide monitors down to Dynamic Viewport Heights (`100dvh`) on mobile terminals.
 
 ---
 
-## 🛠️ Stack Tecnologico
+## 🔒 Security Architecture
 
-| Layer | Tecnologia |
-| :--- | :--- |
-| **Frontend** | Angular 17+ (Signals & Standalone Components) |
-| **Styling** | Tailwind CSS (JIT Engine) |
-| **Backend** | PHP Slim Framework 4 |
-| **Database** | MySQL (InnoDb) |
-| **Auth** | OAuth 2.0 / JWT |
-| **APIs** | Exchange Rates & Crypto Price Feeds |
+* **Relational Cascading Safeguards:** Foreign key structures enforce absolute data integrity. Dropping an account automatically triggers an instant structural purge (`ON DELETE CASCADE`) preventing orphan records inside the transactional ledger.
+* **Read-Only Client State Guards:** Sensitive data forms are structurally isolated from consumer injection fields using secure read-only DOM tags and native Angular data binding configurations (`{{...}}`).
+* **Background Environment Isolation:** Peripheral CSS ambient animations run on decoupled hardware layers (`will-change: transform`, `pointer-events: none`, negative `z-index`), completely protecting interface fields from user interception or clickjacking exploits.
 
 ---
 
-## 📂 Schema Database Esteso (SQL)
+## 💻 Local Deployment & Environment Setup
+
+Follow these procedures to launch your local node instance.
+
+### 1. Database Initialization
+Ensure your MySQL server instance is online. Launch your terminal database panel or chosen GUI manager (e.g., phpMyAdmin, DBeaver) and run the following script to deploy the database blueprint:
 
 ```sql
--- Tabella Account Utenti
+-- Create Database (Optional Initialization)
+CREATE DATABASE IF NOT EXISTS franck_bank_db;
+USE franck_bank_db;
+
+-- Section 1: Core Accounts Ledger
 CREATE TABLE `accounts` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `owner_name` VARCHAR(255) NOT NULL,
-  `nickname` VARCHAR(50) NOT NULL UNIQUE,
-  `profile_image` VARCHAR(500),
+  `user_name` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255),  
+  `profile_image` VARCHAR(500),                
   `currency` CHAR(3) NOT NULL DEFAULT 'EUR',
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `key_log` VARCHAR(255),
+  `google_id` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Tabella Movimenti
-CREATE TABLE `movements` (
+-- Section 2: Relational Transactions Database
+CREATE TABLE `transactions` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `account_id` INT(11) NOT NULL,
-  `type` ENUM('DEPOSIT', 'WITHDRAW') NOT NULL,
-  `amount` DECIMAL(15,2) NOT NULL,
-  `description` TEXT,
+  `description` VARCHAR(255) NULL,
+  `amount` DECIMAL(10, 2) NOT NULL,
+  `type` ENUM('deposit', 'withdrawal') NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`account_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
   `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE
