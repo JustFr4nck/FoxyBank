@@ -66,7 +66,7 @@ export class ListaMov implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.bankService.getTransactions(1).subscribe({
+    this.bankService.getTransactions().subscribe({
       next: (response) => {
         this.movimenti = response.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         this.updateChartData();
@@ -115,7 +115,7 @@ export class ListaMov implements OnInit {
       labels: nuoveEtichette,
       datasets: [
         {
-          ...configurazioneDatasetEsistente, 
+          ...configurazioneDatasetEsistente,
           data: nuoviDati
         }
       ]

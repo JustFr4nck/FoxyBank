@@ -31,7 +31,7 @@ export class Prelievo implements OnInit {
 
    ngOnInit(): void {
 
-      this.bankService.getAccountBalance(1).subscribe({
+      this.bankService.getAccountBalance().subscribe({
         next: (response) => {
           this.saldoDisponibile = response.balance;
         },
@@ -63,7 +63,7 @@ export class Prelievo implements OnInit {
     };
 
 
-    this.bankService.doWithdrawals(1, payload).subscribe({
+    this.bankService.doWithdrawals(payload).subscribe({
       next: (res) => {
         for (let i = 0; i < 20; i++) {
           this.createParticle();

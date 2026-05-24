@@ -25,7 +25,7 @@ export class Deposito implements OnInit {
   constructor(private bankService: BankService, private router: Router) {}
 
   ngOnInit(): void {
-      this.bankService.getAccountBalance(1).subscribe({
+      this.bankService.getAccountBalance().subscribe({
         next: (response) => {
           this.saldoAttuale = response.balance;
         },
@@ -50,7 +50,7 @@ export class Deposito implements OnInit {
       description: this.descrizione || 'No description',
     };
 
-    this.bankService.doDeposit(1, payload).subscribe({
+    this.bankService.doDeposit(payload).subscribe({
       next: (res) => {
         for (let i = 0; i < 20; i++) {
           this.createParticle();

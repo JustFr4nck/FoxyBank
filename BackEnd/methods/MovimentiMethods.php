@@ -22,6 +22,8 @@ class MovimentiMethods{
      public function getConnection() {
         return $this->db;
     }
+
+    
 }
 
 

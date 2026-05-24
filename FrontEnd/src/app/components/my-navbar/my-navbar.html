@@ -1,6 +1,5 @@
 <nav class="nav-crazy h-16 flex items-center sticky top-0 z-[1000]">
   <div class="w-full mx-auto px-4 md:px-6 flex justify-between items-center relative z-[1010]">
-
     <div class="flex items-center gap-4">
       <a routerLink="/" class="flex items-center group relative z-[1020]">
         <div class="w-8 h-8 mr-2 relative">
@@ -15,49 +14,82 @@
       </a>
     </div>
 
-
     <div class="hidden lg:flex items-center space-x-8">
-      <a *ngFor="let link of navLinks"
-         [routerLink]="link.path"
-         routerLinkActive="active-link"
-         class="crazy-link text-[10px]">
+      <a
+        *ngFor="let link of navLinks"
+        [routerLink]="link.path"
+        routerLinkActive="active-link"
+        class="crazy-link text-[10px]"
+      >
         {{ getCrazyLabel(link.label) }}
       </a>
 
-
       <div class="relative account-container ml-4 pl-6 border-l border-white/10">
-        <button (click)="toggleAccountMenu($event)" class="flex items-center gap-3 focus:outline-none group">
+        <button
+          (click)="toggleAccountMenu($event)"
+          class="flex items-center gap-3 focus:outline-none group"
+        >
           <div class="flex flex-col items-end justify-center">
-            <span class="text-[8px] font-mono text-violet-500/60 tracking-widest uppercase">User_Auth</span>
-            <span class="text-[11px] font-bold text-white tracking-tight">FRANCK_01</span>
+            <span class="text-[8px] font-mono text-violet-500/60 tracking-widest uppercase"
+              >User_Auth</span
+            >
+            <span class="text-[11px] font-bold text-white tracking-tight">{{
+              accountData?.user_name
+            }}</span>
           </div>
 
           <div class="relative w-9 h-9">
-            <div class="absolute inset-0 bg-gradient-to-tr from-violet-600 to-orange-500 rounded-lg blur-sm opacity-40 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="relative w-full h-full bg-black rounded-lg border border-white/20 flex items-center justify-center group-hover:border-violet-500/50">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-violet-400 group-hover:text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
+            <div
+              class="absolute inset-0 bg-gradient-to-tr from-violet-600 to-orange-500 rounded-lg blur-sm opacity-40 group-hover:opacity-100 transition-opacity duration-500"
+            ></div>
+            <div
+              class="relative w-full h-full bg-black rounded-lg border border-white/20 flex items-center justify-center group-hover:border-violet-500/50"
+            >
+              <img
+                [src]="accountData?.profile_image"
+                class="w-full h-full object-cover rounded-lg"
+              />
             </div>
           </div>
         </button>
 
-
-        <div *ngIf="isAccountMenuOpen"
-             class="absolute top-full right-0 mt-3 w-48 bg-black/95 border border-violet-500/30 rounded-xl overflow-hidden shadow-2xl backdrop-blur-xl animate-in">
+        <div
+          *ngIf="isAccountMenuOpen"
+          class="absolute top-full right-0 mt-3 w-48 bg-black/95 border border-violet-500/30 rounded-xl overflow-hidden shadow-2xl backdrop-blur-xl animate-in"
+        >
           <div class="p-2 flex flex-col gap-1">
-            <a routerLink="/settings" (click)="isAccountMenuOpen = false"
-               class="flex items-center gap-3 px-4 py-3 text-[10px] font-mono text-white/70 hover:text-white hover:bg-violet-600/20 rounded-lg transition-all group/item">
-              <svg class="w-4 h-4 text-violet-500 group-hover/item:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <a
+              routerLink="/settings"
+              (click)="isAccountMenuOpen = false"
+              class="flex items-center gap-3 px-4 py-3 text-[10px] font-mono text-white/70 hover:text-white hover:bg-violet-600/20 rounded-lg transition-all group/item"
+            >
+              <svg
+                class="w-4 h-4 text-violet-500 group-hover/item:rotate-90 transition-transform duration-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                />
                 <circle cx="12" cy="12" r="3" />
               </svg>
               SETTINGS_CORE
             </a>
-            <button (click)="logout()"
-                    class="flex items-center gap-3 px-4 py-3 text-[10px] font-mono text-red-400/70 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all">
+            <button
+              (click)="onLogout()"
+              class="flex items-center gap-3 px-4 py-3 text-[10px] font-mono text-red-400/70 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+            >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
               </svg>
               TERMINATE_SESSION
             </button>
@@ -66,102 +98,140 @@
       </div>
     </div>
 
-
     <button (click)="toggleMenu()" class="lg:hidden p-3 -mr-2 relative z-[1020]">
       <div class="w-6 h-5 flex flex-col justify-between">
-        <span [ngClass]="isMenuOpen ? 'rotate-45 translate-y-2' : ''" class="h-[2px] w-full bg-orange-500 transition-all duration-300 origin-center"></span>
-        <span [ngClass]="isMenuOpen ? 'opacity-0' : ''" class="h-[2px] w-full bg-violet-500 transition-all duration-300"></span>
-        <span [ngClass]="isMenuOpen ? '-rotate-45 -translate-y-2' : ''" class="h-[2px] w-full bg-orange-500 transition-all duration-300 origin-center"></span>
+        <span
+          [ngClass]="isMenuOpen ? 'rotate-45 translate-y-2' : ''"
+          class="h-[2px] w-full bg-orange-500 transition-all duration-300 origin-center"
+        ></span>
+        <span
+          [ngClass]="isMenuOpen ? 'opacity-0' : ''"
+          class="h-[2px] w-full bg-violet-500 transition-all duration-300"
+        ></span>
+        <span
+          [ngClass]="isMenuOpen ? '-rotate-45 -translate-y-2' : ''"
+          class="h-[2px] w-full bg-orange-500 transition-all duration-300 origin-center"
+        ></span>
       </div>
     </button>
   </div>
 
-
-  <div *ngIf="isMenuOpen" (click)="toggleMenu()" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[1001] lg:hidden"></div>
-  <div [ngClass]="isMenuOpen ? 'translate-x-0' : 'translate-x-full'"
-       class="fixed top-0 right-0 h-[100dvh] w-[80%] max-w-[300px] bg-zinc-950 border-l border-violet-900/50 z-[1005] lg:hidden transition-transform duration-500 ease-out">
+  <div
+    *ngIf="isMenuOpen"
+    (click)="toggleMenu()"
+    class="fixed inset-0 bg-black/80 backdrop-blur-md z-[1001] lg:hidden"
+  ></div>
+  <div
+    [ngClass]="isMenuOpen ? 'translate-x-0' : 'translate-x-full'"
+    class="fixed top-0 right-0 h-[100dvh] w-[80%] max-w-[300px] bg-zinc-950 border-l border-violet-900/50 z-[1005] lg:hidden transition-transform duration-500 ease-out"
+  >
     <div class="flex flex-col h-full p-8 pt-20">
       <div class="flex items-center gap-4 mb-10 pb-6 border-b border-white/5">
         <div class="w-12 h-12 bg-gradient-to-br from-violet-600 to-orange-600 rounded-xl p-[1px]">
-          <div class="w-full h-full bg-zinc-950 rounded-xl flex items-center justify-center font-bold text-white">FR</div>
+            <img [src]="accountData?.profile_image"/>
         </div>
         <div class="flex flex-col">
-          <span class="text-white font-bold uppercase">Franck</span>
-          <span class="text-[9px] text-orange-500 font-mono tracking-widest animate-pulse">● Platinum_Node</span>
+          <span class="text-white font-bold uppercase">{{ accountData?.user_name }}</span>
+          <span class="text-[9px] text-orange-500 font-mono tracking-widest animate-pulse"
+            >● Platinum_Node</span
+          >
         </div>
       </div>
       <nav class="flex flex-col space-y-2">
-        <a *ngFor="let link of navLinks; let i = index"
-           [routerLink]="link.path"
-           (click)="toggleMenu()"
-           routerLinkActive="active-mobile-link"
-           class="text-white/70 font-mono text-xs tracking-widest py-4 border-b border-white/5">
-          <span class="text-violet-600 mr-4 font-black">0{{i+1}}</span>
+        <a
+          *ngFor="let link of navLinks; let i = index"
+          [routerLink]="link.path"
+          (click)="toggleMenu()"
+          routerLinkActive="active-mobile-link"
+          class="text-white/70 font-mono text-xs tracking-widest py-4 border-b border-white/5"
+        >
+          <span class="text-violet-600 mr-4 font-black">0{{ i + 1 }}</span>
           {{ getCrazyLabel(link.label) }}
         </a>
       </nav>
     </div>
   </div>
 
-
-
-<div [ngClass]="isMenuOpen ? 'translate-x-0' : 'translate-x-full'"
-     class="fixed top-0 right-0 h-[100dvh] w-[80%] max-w-[300px] bg-zinc-950 border-l border-violet-900/50 z-[1005] lg:hidden transition-transform duration-500 ease-out shadow-[-20px_0_40px_rgba(0,0,0,0.8)]">
-
+  <div
+    [ngClass]="isMenuOpen ? 'translate-x-0' : 'translate-x-full'"
+    class="fixed top-0 right-0 h-[100dvh] w-[80%] max-w-[300px] bg-zinc-950 border-l border-violet-900/50 z-[1005] lg:hidden transition-transform duration-500 ease-out shadow-[-20px_0_40px_rgba(0,0,0,0.8)]"
+  >
     <div class="flex flex-col h-full p-8 pt-20">
-
-
       <div class="flex items-center gap-4 mb-8 pb-6 border-b border-white/5">
         <div class="w-12 h-12 bg-gradient-to-br from-violet-600 to-orange-600 rounded-xl p-[1px]">
-          <div class="w-full h-full bg-zinc-950 rounded-xl flex items-center justify-center">
-             <span class="text-white font-mono font-bold">FR</span>
-          </div>
+          <img
+                [src]="accountData?.profile_image"
+                class="w-full h-full object-cover rounded-lg"
+              />
         </div>
         <div class="flex flex-col">
-          <span class="text-white font-bold tracking-tight uppercase">Franck</span>
-          <span class="text-[9px] text-orange-500 font-mono tracking-widest animate-pulse">● Platinum_Node</span>
+          <span class="text-white font-bold tracking-tight uppercase">{{accountData?.user_name}}</span>
+          <span class="text-[9px] text-orange-500 font-mono tracking-widest animate-pulse"
+            >● Platinum_Node</span
+          >
         </div>
       </div>
 
-
       <nav class="flex flex-col space-y-1 flex-grow">
-        <div class="text-violet-500/40 font-mono text-[8px] mb-4 tracking-[0.3em] uppercase">// Navigation</div>
-        <a *ngFor="let link of navLinks; let i = index"
-           [routerLink]="link.path"
-           (click)="toggleMenu()"
-           routerLinkActive="active-mobile-link"
-           class="text-white/70 font-mono text-xs tracking-widest py-4 border-b border-white/5">
-          <span class="text-violet-600 text-[10px] mr-4 font-black">0{{i+1}}</span>
+        <div class="text-violet-500/40 font-mono text-[8px] mb-4 tracking-[0.3em] uppercase">
+          // Navigation
+        </div>
+        <a
+          *ngFor="let link of navLinks; let i = index"
+          [routerLink]="link.path"
+          (click)="toggleMenu()"
+          routerLinkActive="active-mobile-link"
+          class="text-white/70 font-mono text-xs tracking-widest py-4 border-b border-white/5"
+        >
+          <span class="text-violet-600 text-[10px] mr-4 font-black">0{{ i + 1 }}</span>
           {{ getCrazyLabel(link.label) }}
         </a>
       </nav>
 
-
       <div class="mt-auto pt-6 space-y-4 border-t border-white/10">
-        <div class="text-violet-500/40 font-mono text-[8px] tracking-[0.3em] uppercase">// System_Controls</div>
+        <div class="text-violet-500/40 font-mono text-[8px] tracking-[0.3em] uppercase">
+          // System_Controls
+        </div>
 
         <div class="grid grid-cols-1 gap-2">
           <!-- Settings Mobile -->
-          <a routerLink="/settings" (click)="toggleMenu()"
-             class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03] border border-white/5 text-white/80 font-mono text-[10px] active:bg-violet-600/20 transition-all">
-            <svg class="w-4 h-4 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <a
+            routerLink="/settings"
+            (click)="toggleMenu()"
+            class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03] border border-white/5 text-white/80 font-mono text-[10px] active:bg-violet-600/20 transition-all"
+          >
+            <svg
+              class="w-4 h-4 text-violet-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+              />
             </svg>
             SETTINGS_CORE
           </a>
 
-
-          <button (click)="logout(); toggleMenu()"
-                  class="flex items-center gap-3 p-3 rounded-lg bg-red-500/5 border border-red-500/10 text-red-400 font-mono text-[10px] active:bg-red-500/20 transition-all">
+          <button
+            (click)="onLogout(); toggleMenu()"
+            class="flex items-center gap-3 p-3 rounded-lg bg-red-500/5 border border-red-500/10 text-red-400 font-mono text-[10px] active:bg-red-500/20 transition-all"
+          >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
             </svg>
             TERMINATE_SESSION
           </button>
         </div>
       </div>
-
     </div>
-</div>
-
+  </div>
 </nav>

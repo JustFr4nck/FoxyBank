@@ -2,24 +2,43 @@
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
+require_once __DIR__ . '/../methods/MovimentiMethods.php';
+
 class SaldoController
 {
-    private function get_data() {
-        return @new MySQLi('localhost', 'root', '', 'banca');
+    private $mysqli;
+
+    public function __construct()
+  {
+    $this->mysqli = new MovimentiMethods();
+  }
+
+    private function getAuthenticatedAccountId($db)
+    {
+        if (!isset($_SESSION['user']['google_id'])) {
+            return null;
+        }
+        
+        $googleId = $_SESSION['user']['google_id'];
+        $stmt = $db->prepare("SELECT id FROM accounts WHERE google_id = ?");
+        $stmt->bind_param("s", $googleId);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_assoc();
+        
+        return $res ? (int)$res['id'] : null;
     }
 
-    // GET /accounts/{idAccount}/balance
-    public function index(Request $request, Response $response, $args){
-        $mysqli = $this->get_data();
-        $accountId = (int)$args['idAccount']; 
+    // GET /accounts/my-account/balance
+    public function index(Request $request, Response $response, array $args){
+        $db = $this->mysqli->getConnection();
+        $accountId = $this->getAuthenticatedAccountId($db);
 
-        $check = $mysqli->query("SELECT id FROM accounts WHERE id = $accountId");
-        if (!$check || $check->num_rows === 0) {
-            $response->getBody()->write(json_encode(['error' => 'Account not found']));
-            return $response->withHeader("Content-type", "application/json")->withStatus(404);
+        if (!$accountId) {
+            $response->getBody()->write(json_encode(['error' => 'Unauthorized']));
+            return $response->withHeader("Content-type", "application/json")->withStatus(410);
         }
 
-        $result = $mysqli->query("SELECT SUM(CASE WHEN type = 'deposit' THEN amount ELSE -amount END) as balance FROM transactions WHERE account_id = $accountId");
+        $result = $db->query("SELECT SUM(CASE WHEN type = 'deposit' THEN amount ELSE -amount END) as balance FROM transactions WHERE account_id = $accountId");
         $row = $result->fetch_assoc();
         $balance = (float)($row['balance'] ?? 0.00);
 
@@ -31,40 +50,32 @@ class SaldoController
     }
 
 
-    // GET /accounts/{idAccount}/balance/convert/fiat?to=USD
-    public function convert_to_fiat(Request $request, Response $response, $args){
-        $accountId = $args['idAccount'];
-        $mysqli = $this->get_data(); 
+    // GET /accounts/my-account/balance/convert/fiat?to=USD
+    public function convert_to_fiat(Request $request, Response $response, array $args){
+        $db = $this->mysqli->getConnection();
+        $accountId = $this->getAuthenticatedAccountId($db);
+
+        if (!$accountId) {
+            $response->getBody()->write(json_encode(['error' => 'Unauthorized']));
+            return $response->withHeader("Content-type", "application/json")->withStatus(401);
+        }
+
         $params = $request->getQueryParams();
         $to = strtoupper($params['to'] ?? '');
 
         if (!$to) {
-            $response->getBody()->write(json_encode([
-                'error' => 'Missing target currency'
-            ]));
-            return $response
-                ->withHeader('Content-Type', 'application/json')
-                ->withStatus(400);
+            $response->getBody()->write(json_encode(['error' => 'Missing target currency']));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
 
-        $stmt = $mysqli->prepare('SELECT id, currency FROM accounts WHERE id = ?');
+        $stmt = $db->prepare('SELECT id, currency FROM accounts WHERE id = ?');
         $stmt->bind_param('i', $accountId);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $account = $result->fetch_assoc();
-
-        if (!$account) {
-            $response->getBody()->write(json_encode([
-                'error' => 'Account not found'
-            ]));
-            return $response
-                ->withHeader('Content-Type', 'application/json')
-                ->withStatus(404);
-        }
+        $account = $stmt->get_result()->fetch_assoc();
 
         $from = strtoupper($account['currency']);
 
-        $stmt = $mysqli->prepare("
+        $stmt = $db->prepare("
             SELECT
                 COALESCE(SUM(CASE WHEN type = 'deposit' THEN amount ELSE 0 END), 0) -
                 COALESCE(SUM(CASE WHEN type = 'withdrawal' THEN amount ELSE 0 END), 0) AS balance
@@ -73,31 +84,21 @@ class SaldoController
         ");
         $stmt->bind_param('i', $accountId);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        $balance = $row['balance'] ?? 0;
+        $balance = $stmt->get_result()->fetch_assoc()['balance'] ?? 0;
 
         $url = "https://api.frankfurter.dev/v1/latest?base={$from}&symbols={$to}";
         $json = @file_get_contents($url);
 
         if ($json === false) {
-            $response->getBody()->write(json_encode([
-                'error' => 'External exchange API unavailable'
-            ]));
-            return $response
-                ->withHeader('Content-Type', 'application/json')
-                ->withStatus(502);
+            $response->getBody()->write(json_encode(['error' => 'External exchange API unavailable']));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(502);
         }
 
         $data = json_decode($json, true);
 
         if (!isset($data['rates'][$to])) {
-            $response->getBody()->write(json_encode([
-                'error' => 'Target currency not supported'
-            ]));
-            return $response
-                ->withHeader('Content-Type', 'application/json')
-                ->withStatus(400);
+            $response->getBody()->write(json_encode(['error' => 'Target currency not supported']));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
 
         $rate = $data['rates'][$to];
@@ -118,11 +119,16 @@ class SaldoController
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    // GET /accounts/{idAccount}/balance/convert/crypto?to=BTC
-    public function convert_to_crypto(Request $request, Response $response, $args) {
-        $mysqli = $this->get_data();
-        $accountId = $args['idAccount'] ?? 0;
+    // GET /accounts/my-account/balance/convert/crypto?to=BTC
+    public function convert_to_crypto(Request $request, Response $response, array $args) {
+        $db = $this->mysqli->getConnection();
+        $accountId = $this->getAuthenticatedAccountId($db);
         
+        if (!$accountId) {
+            $response->getBody()->write(json_encode(['error' => 'Unauthorized']));
+            return $response->withHeader("Content-type", "application/json")->withStatus(401);
+        }
+
         $params = $request->getQueryParams();
         $to = strtoupper($params['to'] ?? '');
 
@@ -131,18 +137,13 @@ class SaldoController
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
 
-        $stmt = $mysqli->prepare('SELECT currency FROM accounts WHERE id = ?');
+        $stmt = $db->prepare('SELECT currency FROM accounts WHERE id = ?');
         $stmt->bind_param('i', $accountId);
         $stmt->execute();
         $account = $stmt->get_result()->fetch_assoc();
-
-        if (!$account) {
-            $response->getBody()->write(json_encode(['error' => 'Account not found']));
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
-        }
         $from = strtoupper($account['currency']);
 
-        $stmt = $mysqli->prepare("
+        $stmt = $db->prepare("
             SELECT 
                 COALESCE(SUM(CASE WHEN type = 'deposit' THEN amount ELSE 0 END), 0) - 
                 COALESCE(SUM(CASE WHEN type = 'withdrawal' THEN amount ELSE 0 END), 0) AS balance 
@@ -155,7 +156,6 @@ class SaldoController
 
         $marketSymbol = $to . $from; 
         $url = "https://api.binance.com/api/v3/ticker/price?symbol=" . $marketSymbol;
-        
         $json = @file_get_contents($url);
 
         if ($json === false) {
@@ -189,8 +189,5 @@ class SaldoController
         ]));
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
-    
     }
-
-
 }

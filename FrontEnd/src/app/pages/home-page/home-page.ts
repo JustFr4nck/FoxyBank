@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { CommonModule, NgClass, NgSwitch } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AccountBalance, ConversionBTC, ConversionUSD, Transaction } from '../../models/saldo.model';
@@ -20,7 +21,7 @@ export class HomePage implements OnInit {
   inboundTotal: number = 0;
   outboundTotal: number = 0;
 
-  constructor(private bankService: BankService) {}
+  constructor(private bankService: BankService, private router: Router) {}
 
   calculateTotals(): void {
     this.inboundTotal = this.movimenti
@@ -34,7 +35,7 @@ export class HomePage implements OnInit {
 
   ngOnInit(): void {
 
-      this.bankService.getAccountBalance(1).subscribe({
+      this.bankService.getAccountBalance().subscribe({
         next: (response) => {
           this.data = response;
           this.calculateTotals();
@@ -44,18 +45,22 @@ export class HomePage implements OnInit {
         }
       });
 
-      this.bankService.getTransactions(1).subscribe({
+      this.bankService.getTransactions().subscribe({
         next: (response: any) => {
           this.movimenti = [...response].reverse();
         },
         error: (err) => {
-           console.error("Error during call:", err);
+          console.error("Error during call:", err);
+          if (err.status === 401) {
+            console.warn("Sessione expired. Redirecting to login...");
+            this.router.navigate(['/auth']);
+          }
         }
       })
 
 
 
-      this.bankService.getConvUSD(1).subscribe({
+      this.bankService.getConvUSD().subscribe({
         next:(response: any) => {
           this.conversionUSD = response;
         },
@@ -64,7 +69,7 @@ export class HomePage implements OnInit {
         }
       })
 
-      this.bankService.getConvBTC(1).subscribe({
+      this.bankService.getConvBTC().subscribe({
          next:(response: any) => {
           this.conversionBTC = response;
         },

@@ -29,7 +29,8 @@ export class MovDetails implements OnInit {
 
   ngOnInit(): void {
     this.id = +this.route.snapshot.paramMap.get('id')!;
-    this.bankService.getTransactionDet(1, this.id).subscribe({
+
+    this.bankService.getTransactionDet(this.id).subscribe({
       next: (response) => {
         this.movimento = response;
       },
@@ -41,7 +42,7 @@ export class MovDetails implements OnInit {
 
   saveDescription(): void {
     if (this.id && this.mockDesc.trim()) {
-      this.bankService.updateDescTrans(1, this.id, this.mockDesc).subscribe({
+      this.bankService.updateDescTrans(this.id, this.mockDesc).subscribe({
         next: (updatedMovement: Transaction) => {
           if (this.movimento) {
             this.movimento.description = updatedMovement.description || this.mockDesc;
@@ -66,18 +67,17 @@ export class MovDetails implements OnInit {
     }
   }
 
-  deleteMov(): void{
-    if(this.id){
-      this.bankService.deleteTrans(1, this.id).subscribe({
+  deleteMov(): void {
+    if (this.id) {
+      this.bankService.deleteTrans(this.id).subscribe({
         next: () => {
           this.router.navigate(['/listaMovimenti']);
         },
         error: (err) => {
           console.error('Error during delete:', err);
         },
-      })
-    }
-    else{
+      });
+    } else {
       console.warn("BAD REQUEST");
     }
   }

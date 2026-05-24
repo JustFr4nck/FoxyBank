@@ -1,8 +1,9 @@
+import { BankService } from './../../services/bank.service';
 import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { routes } from '../../app.routes';
-
+import { AccountData } from '../../models/account.models';
 
 @Component({
   selector: 'app-my-navbar',
@@ -15,8 +16,12 @@ export class MyNavbar implements OnInit {
   navLinks: any[] = [];
   isMenuOpen = false;
   isAccountMenuOpen = false;
+  accountData? : AccountData;
 
-  constructor(private router: Router){};
+  constructor(
+    private router: Router,
+    private bankService: BankService,
+  ) {}
 
   ngOnInit(): void {
     this.navLinks = routes
@@ -24,7 +29,7 @@ export class MyNavbar implements OnInit {
         (route) =>
           route.path !== '' &&
           route.path !== undefined &&
-          route.path !== 'auth' &&
+          route.path !== 'login' &&
           route.path !== '**' &&
           !route.path.includes(':'),
       )
@@ -32,6 +37,26 @@ export class MyNavbar implements OnInit {
         path: `/${route.path}`,
         label: route.path!,
       }));
+
+    this.bankService.getAccountUser().subscribe({
+      next: (response) => {
+        this.accountData = response;
+      },
+      error: (err) => console.error(err),
+    });
+  }
+
+  onLogout(): void {
+    this.bankService.logout().subscribe({
+      next: (response: string) => {
+        console.log('Risposta backend:', response);
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('Error during logout: ', err);
+        this.router.navigate(['/login']);
+      },
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -68,10 +93,5 @@ export class MyNavbar implements OnInit {
       deposito: 'DEPOSIT',
     };
     return mapping[label] || label.toUpperCase();
-  }
-
-  logout() {
-    this.router.navigate(['/auth']);
-    console.log('Session terminated.');
   }
 }

@@ -19,7 +19,7 @@ export class App {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
-      this.showNavbar = !event.url.includes('/auth');
+      this.showNavbar = !event.url.includes('/login');
     });
   }
 
