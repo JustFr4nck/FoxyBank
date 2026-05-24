@@ -22,7 +22,12 @@ $app = AppFactory::create();
 
 $app->getRouteCollector()->setDefaultInvocationStrategy(new \Slim\Handlers\Strategies\RequestResponse());
 
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+    $_SERVER['HTTPS'] = 'on';
+}
+
 if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_samesite', 'Lax'); 
     session_start();
 }
 
