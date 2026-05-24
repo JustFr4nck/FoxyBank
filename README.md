@@ -15,10 +15,13 @@ An ultra-modern, cyberpunk-themed digital banking web application featuring high
 
 ### Frontend Architecture
 * **Framework:** Angular (v17+) – Component-driven frontend structure with standalone components.
-* **Styling Engine:** Tailwind CSS – Fluid util-first styling framework with dynamic theme configurations.
+* **Styling Engine:** Tailwind CSS – Fluid utility-first styling framework with dynamic theme configurations.
 * **Typography:** Fira Code (Google Fonts) – Monospaced developer-centric layout.
 
-### Backend & Database Engine
+### Backend Engine
+* **Micro-Framework:** PHP / Slim Framework – Light, fast, and secure RESTful API routing infrastructure to manage network requests.
+
+### Database Engine
 * **Database:** MySQL / MariaDB (InnoDB Engine)
 * **Collation:** `utf8mb4_general_ci` (Full multibyte character support for internationalization and media strings).
 
@@ -26,7 +29,7 @@ An ultra-modern, cyberpunk-themed digital banking web application featuring high
 
 ## ⚡ Core Features & Services
 
-* **Secure Authentication (Google OAuth):** Passwordless decentralized authentication infrastructure bound to unique node entities.
+* **Secure Authentication (Google OAuth):** Passwordless decentralized authentication infrastructure bound to unique node entities via Google login.
 * **Global Account Hub:** Comprehensive asset profile displaying the system terminal status, unique `user_name`, linked communication routes (`email`), and localized account timestamps.
 * **Real-time Liquidity Tracking:** Instant balance computational system displaying available fiat assets (`EUR`) synchronized with network ledger databases.
 * **Transactional Ledger Processing:** Relational transaction accounting processing dual transaction mechanisms:
@@ -38,6 +41,7 @@ An ultra-modern, cyberpunk-themed digital banking web application featuring high
 
 ## 🔒 Security Architecture
 
+* **Google OAuth Implementation:** Identity management is outsourced to Google OAuth protocol, eliminating the need to store passwords locally, mitigating credential leaks, and ensuring secure token-based user verification.
 * **Relational Cascading Safeguards:** Foreign key structures enforce absolute data integrity. Dropping an account automatically triggers an instant structural purge (`ON DELETE CASCADE`) preventing orphan records inside the transactional ledger.
 * **Read-Only Client State Guards:** Sensitive data forms are structurally isolated from consumer injection fields using secure read-only DOM tags and native Angular data binding configurations (`{{...}}`).
 * **Background Environment Isolation:** Peripheral CSS ambient animations run on decoupled hardware layers (`will-change: transform`, `pointer-events: none`, negative `z-index`), completely protecting interface fields from user interception or clickjacking exploits.
@@ -49,7 +53,7 @@ An ultra-modern, cyberpunk-themed digital banking web application featuring high
 Follow these procedures to launch your local node instance.
 
 ### 1. Database Initialization
-Ensure your MySQL server instance is online. Launch your terminal database panel or chosen GUI manager (e.g., phpMyAdmin, DBeaver) and run the following script to deploy the database blueprint:
+Ensure your MySQL/MariaDB server instance is online. Launch your terminal database panel or chosen GUI manager (e.g., phpMyAdmin, DBeaver) and run the following script to deploy the database blueprint:
 
 ```sql
 -- Create Database (Optional Initialization)
@@ -79,7 +83,3 @@ CREATE TABLE `transactions` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-  `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`account_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB;
