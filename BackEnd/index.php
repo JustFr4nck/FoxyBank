@@ -8,6 +8,10 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 require __DIR__ . '/vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/');
+$dotenv->load();
+
 require __DIR__ . '/controllers/MovimentiController.php';
 require __DIR__ . '/controllers/SaldoController.php';
 require __DIR__ . '/controllers/AccountController.php';
@@ -64,9 +68,9 @@ $app->get('/accounts/my-account/balance/convert/crypto', "SaldoController:conver
 function getGoogleClient(): GoogleClient 
 {
     $client = new GoogleClient();
-    $client->setClientId('');
-    $client->setClientSecret('');
-    $client->setRedirectUri('http://localhost:80/auth/google/callback');
+    $client->setClientId($_ENV["GOOGLE_CLIENT_ID"]);
+    $client->setClientSecret($_ENV["GOOGLE_CLIENT_SECRET"]);
+    $client->setRedirectUri($_ENV["GOOGLE_REDIRECT_URI"]);
     
     $client->addScope('email');
     $client->addScope('profile');

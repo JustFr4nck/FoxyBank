@@ -6,17 +6,11 @@ class MovimentiMethods{
 
     public function __construct(){
 
-    $this->db = @new MySQLi("localhost",
-                                "root",
-                                "",
-                                "banca");
+    $this->db = @new MySQLi($_ENV['DB_HOST'],
+                                $_ENV['DB_USER'],
+                                $_ENV['DB_PASS'],
+                                $_ENV['DB_NAME']);
         
-    /*
-        $this->db = @new MySQLi(getenv('DB_HOST'),
-                                getenv('DB_USER'),
-                                getenv('DB_PASSWORD'),
-                                getenv('DB_NAME'));
-                                */
     }
 
      public function getConnection() {
